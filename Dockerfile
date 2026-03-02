@@ -14,12 +14,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire project
 COPY . .
 
-# Run migrations
-RUN python manage.py migrate --noinput || true
-RUN python manage.py collectstatic --noinput || true
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Expose the port
 EXPOSE 8000
 
-# Run the application
-CMD ["gunicorn", "bnb_hack.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
+# Run the entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]
